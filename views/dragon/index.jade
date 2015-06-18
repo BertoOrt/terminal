@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+  p.log
+    !{log}
+  .input 
+    !{input}
+  .body
+    form(action="", method="post")= line
+      label(for="command")  
+        input.command(type="text", name="command", autocomplete="off", autofocus)
+    script(type="text/javascript", src="/javascripts/client.js")
