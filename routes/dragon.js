@@ -16,8 +16,8 @@ router.get('/dragon', function(req,res,next){
 });
 
 router.get('/dragon/:name', function(req, res, next) {
-  dragonScript.findOne({name: req.params.name}, function (err, data) {
-  res.render('dragon/show', {input: fun.input(results), log: fun.input(dragonStory.quest[data["log"]]), line: line})
+  dragonScript.findOne({name: req.params.name.toLowerCase()}, function (err, data) {
+    res.render('dragon/show', {input: fun.input(results), log: fun.input(dragonStory.quest[data["log"]]), line: line})
   });
 });
 
@@ -25,12 +25,26 @@ router.post('/dragon', function(req,res,next) {
   var command = req.body.command;
   if ( command.toLowerCase() === "quit") {
     results = [];
+    logPlace = 0;
     res.redirect('/');
   }
   else if(dead === 0) {
     dead = 1;
     results = [];
     res.redirect('/');
+  }
+  else if (logPlace === 1) {
+    dragonScript.findOne({"name": command.toLowerCase()}, function (err, data) {
+    if (data === null) {
+      logPlace ++;
+      dragonScript.insert({"name": command.toLowerCase(), log: 2});
+      res.redirect('/dragon/' + command.toLowerCase());
+    }
+    else {
+      results.push("that name already exists<br> you can login or type a different name");
+      res.redirect('/dragon');
+    }
+    });
   }
   else {
     if (command === "clear") {
@@ -52,27 +66,10 @@ router.post('/dragon', function(req,res,next) {
       logPlace ++;
       res.redirect('/dragon')
     }
-    else if (logPlace === 1) {
-      dragonScript.insert({"name": command.toLowerCase(), log: 2});
-      res.redirect('/dragon/' + command);
-      logPlace ++;
-    }
     else if(command.indexOf("login ") > -1) {
       var name = command.replace("login ", "");
       res.redirect('/dragon/' + name.toLowerCase());
     }
-    // else if (logPlace === 1) {
-    //   dragonScript.findOne({"name": command}, function (err, data) {
-    //   if (data.name === command) {
-    //     results.push("that name already exists<br> you can login or type a different name");
-    //   }
-    //   else {
-    //     dragonScript.insert({"name": command});
-    //     res.redirect('/dragon');
-    //     logPlace ++;
-    //   }
-    //   });
-    // }
     else {
       results.push(command + ": command not found");};
     res.redirect('/dragon')
@@ -96,7 +93,8 @@ router.post('/dragon/:name', function(req,res,next) {
     }
     else if(command === "restart") {
       dragonScript.update({"name" : req.params.name}, {$set: {"log" : 2}})
-      res.redirect('/dragon/' + req.params.name)
+      results = ["game reset"];
+      res.redirect('/dragon/' + req.params.name);
     }
     else if (command === "help") {
       results.push(fun.parser(dragonStory.help))

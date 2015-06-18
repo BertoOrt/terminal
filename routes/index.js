@@ -17,6 +17,18 @@ router.post('/', function(req,res,next) {
   if ( line === "web-unix:~/dragonScript $" && command.toLowerCase() === "draw sword") {
     res.redirect('/dragon');
   }
+  else if( line === "web-unix:~/dragonScript $" && command.indexOf("login ") > -1) {
+    var name = command.replace("login ", "").toLowerCase();
+    dragonScript.findOne({name: name.toLowerCase()}, function(err, data) {
+      if (data === null) {
+        results.push("error: name not found");
+        res.redirect('/');
+      }
+      else {
+        res.redirect('/dragon/' + name);
+      }
+    });
+  }
   else {
     if (command === "clear") {
       results = ["All clear. Type help for assistance."]
@@ -31,10 +43,6 @@ router.post('/', function(req,res,next) {
       line = "web-unix:~/dragonScript $";
       results.push(trueDragon.join("<br>") + "<br>if this is your first time, draw sword to begin<br>" + "or login (name) to begin");
     }
-    else if( line === "web-unix:~/dragonScript $" && command.indexOf("login ") > -1) {
-      var name = command.replace("login ", "");
-      res.redirect('/dragon/' + name.toLowerCase());
-    }
     else if( line === "web-unix:~/dragonScript $" && command.toLowerCase() !== "draw sword") {
       results.push(command + ": command not found<br>" + "type dragon to re-enter")
       line = "web-unix:~/workspace $";
@@ -43,7 +51,8 @@ router.post('/', function(req,res,next) {
       results.push(dragonStory.test)
     }
     else {
-      results.push(command + ": command not found");};
+      results.push(command + ": command not found");
+      };
     res.redirect('/')
   }
 })
