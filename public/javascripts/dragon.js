@@ -31,7 +31,7 @@ module.exports = {
     ],
 
     quest: [
-        [ "After a long pause, the dragon speaks: 'Ok... if you're telling the truth, then you would have no problem solving this problem:<br>", "var a = function(n) {(n^3) + 3 === 11 ? console.log(n -2) : console.log(n)}<br>", "a(2);<br>", "What is printed in the console?<br>",
+        [ "After a long pause, the dragon speaks: 'Ok... if you're telling the truth, then you would have no problem solving this problem:<br>", "var a = function(n) {(n^3) + 3 === 11 ? n - 2 : n }<br>", "console.log(a(2));<br>", "What is printed in the console?<br>",
       ],
         ["That was too easy, what about this one:<br>", "var myArr = ['foo', 'bar'];", "myArr.length = 0;", "myArr.push('fizz');", "console.log(myArr);", "", "What is printed in the console?"
       ],
