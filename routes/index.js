@@ -5,7 +5,7 @@ var messages = require('../public/javascripts/messages.js');
 var dragonStory = require('../public/javascripts/dragon.js');
 var results = ["Welcome! Type help for assistance."];
 var line = "web-unix:~/workspace $";
-var db = require('monk')('localhost/dragonScript')
+var db = require('monk')(process.env.MONGOLAB_URI || 'localhost/dragonScript')
 var dragonScript = db.get('testUser')
 
 router.get('/', function(req, res, next) {
