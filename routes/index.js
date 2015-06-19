@@ -3,10 +3,10 @@ var router = express.Router();
 var fun = require('../public/javascripts/server.js');
 var messages = require('../public/javascripts/messages.js');
 var dragonStory = require('../public/javascripts/dragon.js');
+var db = require('monk')(process.env.MONGOLAB_URI || 'localhost/dragonScript');
+var dragonScript = db.get('users');
 var results = ["Welcome! Type help for assistance."];
 var line = "web-unix:~/workspace $";
-var db = require('monk')(process.env.MONGOLAB_URI || 'localhost/dragonScript')
-var dragonScript = db.get('testUser')
 
 router.get('/', function(req, res, next) {
   res.render('index', { input: fun.input(results), line: line});
