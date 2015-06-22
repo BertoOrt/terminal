@@ -41,7 +41,7 @@ router.post('/', function(req,res,next) {
     else if (command === "dragon") {
       var trueDragon = (dragonStory.dragon);
       line = "web-unix:~/dragonScript $";
-      results.push(trueDragon.join("<br>") + "<br>if this is your first time, draw sword to begin<br>" + "or login (name) to begin");
+      results.push(trueDragon.join("<br>") + "<br>if this is your first time, draw sword to begin" + "<br>or any key to exit<br>" + "or login (name) to begin");
     }
     else if( line === "web-unix:~/dragonScript $" && command.toLowerCase() !== "draw sword") {
       results.push(command + ": command not found<br>" + "type dragon to re-enter")
